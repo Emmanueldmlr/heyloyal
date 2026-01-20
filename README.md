@@ -299,20 +299,3 @@ yarn ios
 cd android && ./gradlew clean && cd ..
 yarn android
 ```
-
-## Results
-
-### App Screenshots
-
-<p align="center">
-  <img src="./screenshots/home-screen.png" alt="Home Screen" width="250"/>
-  <img src="./screenshots/reward-screen.png" alt="Reward Details" width="250"/>
-  <img src="./screenshots/combined.png" alt="Collection Screen" width="500"/>
-</p>
-
-
-### Test Result
-
-<p align="center">
-  <img src="./screenshots/test-result.png" alt="Test Results" width="500"/>
-</p>
