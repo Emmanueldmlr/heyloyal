@@ -1,0 +1,12 @@
+export const formatDate = (dateString: string): string => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+        month: 'short',
+        day: '2-digit',
+        year: 'numeric',
+    });
+};
+
+export const formatNumber = (num: number): string => {
+    return num.toLocaleString();
+};
