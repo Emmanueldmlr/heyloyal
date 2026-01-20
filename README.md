@@ -15,6 +15,16 @@ The goal of this project is to create a React Native app that allows users to br
 | **Environment** | react-native-config |
 | **Testing** | Jest 29 + React Test Renderer |
 
+
+## Results
+
+### App Screenshots
+
+<p align="center">
+  <img src="./screenshots/home-screen.png" alt="Home Screen" width="250"/>
+  <img src="./screenshots/reward-screen.png" alt="Reward Details" width="250"/>
+</p>
+
 ## Prerequisites
 
 Before you begin, ensure you have the following installed:
