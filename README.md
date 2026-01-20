@@ -1,97 +1,318 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# HeyLoyal
 
-# Getting Started
+The goal of this project is to create a React Native app that allows users to browse available rewards, collect them, and view their collection.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+## Tech Stack
 
-## Step 1: Start Metro
+| Category | Technology |
+|----------|------------|
+| **Framework** | React Native 0.83.1 (Community CLI) |
+| **Language** | TypeScript 5.8.3 |
+| **State Management** | Redux Toolkit 2.11.2 + React Redux 9.2.0 |
+| **Navigation** | React Navigation 7 (Stack Navigator) |
+| **Styling** | React Native StyleSheet with centralized theme |
+| **Icons** | Lucide React Native |
+| **Environment** | react-native-config |
+| **Testing** | Jest 29 + React Test Renderer |
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+## Prerequisites
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+Before you begin, ensure you have the following installed:
 
-```sh
-# Using npm
-npm start
+- **Node.js** >= 20.19.4 (required by React Native 0.83.1)
+- **Yarn** >= 1.22.x
+- **Watchman** (recommended for macOS)
+- **Xcode** >= 15.0 (for iOS development)
+- **CocoaPods** (for iOS dependencies)
+- **Android Studio** with:
+  - Android SDK
+  - Android NDK
+  - Java Development Kit (JDK) 17
 
-# OR using Yarn
+### Verify Prerequisites
+
+```bash
+node --version    # Should be >= 20.19.4
+yarn --version    # Should be >= 1.22.x
+pod --version     # CocoaPods installed
+```
+
+## Setup
+
+### 1. Clone the Repository
+
+```bash
+git clone <repository-url>
+cd HeyLoyal
+```
+
+### 2. Install Dependencies
+
+```bash
+yarn install
+```
+
+### 3. Environment Configuration
+
+Create a `.env` file in the project root:
+
+```bash
+API_BASE_URL=https://staging.helloagain.at/api/v1/clients/5189
+```
+
+### 4. iOS Setup
+
+```bash
+cd ios
+bundle install          # Install Ruby dependencies
+bundle exec pod install # Install CocoaPods dependencies
+cd ..
+```
+
+### 5. Android Setup
+
+Ensure your `local.properties` file in `/android` contains the correct SDK path:
+
+```properties
+sdk.dir=/Users/<your-username>/Library/Android/sdk
+```
+
+## Running the App
+
+### Start Metro Bundler
+
+```bash
 yarn start
 ```
 
-## Step 2: Build and run your app
+### Run on iOS
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
-
-### Android
-
-```sh
-# Using npm
-npm run android
-
-# OR using Yarn
-yarn android
-```
-
-### iOS
-
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
-
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
-
-```sh
-bundle install
-```
-
-Then, and every time you update your native dependencies, run:
-
-```sh
-bundle exec pod install
-```
-
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
-
-```sh
-# Using npm
-npm run ios
-
-# OR using Yarn
+```bash
 yarn ios
 ```
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+### Run on Android
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+```bash
+yarn android
+```
 
-## Step 3: Modify your app
+## Available Commands
 
-Now that you have successfully run the app, let's make changes!
+| Command | Description |
+|---------|-------------|
+| `yarn start` | Start Metro bundler |
+| `yarn ios` | Build and run on iOS simulator |
+| `yarn android` | Build and run on Android emulator |
+| `yarn test` | Run test suite |
+| `yarn lint` | Run ESLint |
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+## Project Structure
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+```
+HeyLoyal/
+├── src/
+│   ├── components/           # Reusable UI components
+│   │   ├── AchievementSummary/
+│   │   ├── CollectedRewardCard/
+│   │   ├── CollectionCard/
+│   │   └── RewardCard/
+│   ├── hooks/                # Custom React hooks
+│   │   └── useRewards.ts     # Rewards fetching & pagination
+│   ├── navigation/           # Navigation configuration
+│   │   ├── RootNavigator.tsx
+│   │   └── types.ts
+│   ├── screens/              # App screens
+│   │   ├── home/             # Available rewards list
+│   │   └── reward/           # Collected rewards view
+│   ├── services/             # API services
+│   │   └── RewardsSrv.ts
+│   ├── store/                # Redux store
+│   │   ├── slices/
+│   │   │   └── rewardsSlice.ts
+│   │   ├── hooks.ts          # Typed Redux hooks
+│   │   └── index.ts
+│   ├── theme/                # Design system
+│   │   ├── colors.ts
+│   │   ├── spacing.ts
+│   │   ├── typography.ts
+│   │   ├── borderRadius.ts
+│   │   └── shadows.ts
+│   └── types/                # TypeScript interfaces
+├── __tests__/                # Test files
+├── App.tsx                   # App entry point
+├── index.js                  # React Native entry
+└── .env                      # Environment variables
+```
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+## Core Logic
 
-## Congratulations! :tada:
+### 1. Rewards Fetching (`useRewards` hook)
 
-You've successfully run and modified your React Native App. :partying_face:
+The app fetches rewards from a paginated API with the following logic:
 
-### Now what?
+```typescript
+// API returns:
+{
+  count: number,      // Total items available on current page
+  next: string | null, // URL to next page (if exists)
+  results: Reward[]   // Array of rewards
+}
+```
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
+**Pagination Strategy:**
+- `limit` parameter controls how many items to fetch per request (default: 10)
+- `page` parameter indicates which page to fetch from
+- The hook tracks items fetched from the current page
+- Includes a 1.5-second delay on `fetchMore` to prevent rapid API calls
 
-# Troubleshooting
+### 2. Redux State Management
 
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+**State Shape:**
+```typescript
+{
+  rewards: {
+    collectedRewards: CollectedReward[]
+  }
+}
+```
 
-# Learn More
+**Action:**
+- `collectReward` - Adds a reward to the collection with a timestamp
+- Prevents duplicate rewards from being collected
 
-To learn more about React Native, take a look at the following resources:
+**Selectors:**
+- `selectCollectedRewards` - Get all collected rewards
+- `selectIsRewardCollected(id)` - Check if a specific reward is collected
+- `selectCollectedRewardsCount` - Get total number of collected rewards
+- `selectTotalCollectedPoints` - Calculate sum of all collected points
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+### 3. Theme System
+
+Centralized design tokens for consistent styling:
+
+```typescript
+import { colors, spacing, typography, borderRadius, shadows } from '@/theme';
+
+// Usage in styles
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: colors.background.primary,
+    padding: spacing.lg,
+    borderRadius: borderRadius.xl,
+    ...shadows.sm,
+  },
+});
+```
+
+### 4. Import Alias
+
+The project uses `@/` as an alias for the `src/` directory:
+
+```typescript
+// Instead of
+import { colors } from '../../../theme';
+
+// Use
+import { colors } from '@/theme';
+```
+
+Configured in `tsconfig.json` and `babel.config.js`.
+
+## Assumptions
+
+1. **API Response Format:** The rewards API returns a paginated response with `count`, `next`, `previous`, and `results` fields.
+
+2. **Image Filtering:** Rewards without images are filtered out from the display list to ensure consistent UI.
+
+3. **Reward Identification:** Each reward has a unique `id` field used to prevent duplicate collections.
+
+4. **Points System:** The `needed_points` field represents the cost/value of each reward.
+
+5. **Collection Persistence:** Currently, collected rewards are stored in Redux state only (not persisted to local storage or backend).
+
+7. **Network Availability:** The app expects stable network connectivity; offline support is not implemented.
+
+## Testing
+
+The project includes unit tests for:
+
+- **Redux Slice:** Action creators and selectors
+- **API Service:** Network requests and response handling
+- **Custom Hooks:** State management logic
+- **Components:** UI rendering and interactions
+
+### Run Tests
+
+```bash
+yarn test
+```
+
+## Troubleshooting
+
+### iOS Build Issues
+
+**CocoaPods not found:**
+```bash
+sudo gem install cocoapods
+# Or use bundler
+bundle exec pod install
+```
+
+**Xcode build fails:**
+```bash
+cd ios
+rm -rf Pods Podfile.lock
+bundle exec pod install --repo-update
+cd ..
+```
+
+### Android Build Issues
+
+**NDK not found:**
+- Open Android Studio → SDK Manager → SDK Tools
+- Install NDK (Side by side)
+
+**Gradle build fails:**
+```bash
+cd android
+./gradlew clean
+cd ..
+```
+
+### Metro Bundler Issues
+
+**Clear cache and restart:**
+```bash
+yarn start --reset-cache
+```
+
+### Environment Variables Not Loading
+
+Ensure `.env` file exists in project root and rebuild:
+```bash
+# iOS
+cd ios && pod install && cd ..
+yarn ios
+
+# Android
+cd android && ./gradlew clean && cd ..
+yarn android
+```
+
+## Results
+
+### App Screenshots
+
+<p align="center">
+  <img src="./screenshots/home-screen.png" alt="Home Screen" width="250"/>
+  <img src="./screenshots/reward-screen.png" alt="Reward Details" width="250"/>
+  <img src="./screenshots/combined.png" alt="Collection Screen" width="500"/>
+</p>
+
+
+### Test Result
+
+<p align="center">
+  <img src="./screenshots/test-result.png" alt="Test Results" width="500"/>
+</p>
